@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:17
+    container_name: urun_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: urun_takip
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - urun_net
+
+  backend:
+    build: .
+    container_name: urun_backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://admin:admin123@db:5432/urun_takip"
+      JWT_SECRET: "CHANGE_THIS_SECRET"
+    ports:
+      - "5000:5000"
+    networks:
+      - urun_net
+
+networks:
+  urun_net:
+
+volumes:
+  postgres_data:

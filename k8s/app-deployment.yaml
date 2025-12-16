@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urun-takip
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: urun-takip
+  template:
+    metadata:
+      labels:
+        app: urun-takip
+    spec:
+      containers:
+      - name: urun-takip
+        image: urun-takip:latest   # Docker image'in adı
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://postgres:1234@postgres:5432/urun_takibi"
